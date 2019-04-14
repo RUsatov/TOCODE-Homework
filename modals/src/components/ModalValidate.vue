@@ -92,6 +92,15 @@ export default {
     }
   },
   methods: {
+    // ф-ия очистки
+    clearField() {
+        this.name = "";
+        this.email = "";
+        this.password = "";
+        this.repeatPassword = "";
+        this.$v.$reset();
+        this.$emit("close");
+    },
     onSubmit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
@@ -103,21 +112,8 @@ export default {
         console.log(user);
 
         // DONE!
-        this.name = "";
-        this.email = "";
-        this.password = "";
-        this.repeatPassword = "";
-        this.$v.$reset();
-        this.$emit("close");
+        this.clearField()
       }
-    },
-    clearField() {
-      this.name = "";
-      this.email = "";
-      this.password = "";
-      this.repeatPassword = "";
-      this.$v.$reset();
-      this.$emit("close");
     }
   }
 };
