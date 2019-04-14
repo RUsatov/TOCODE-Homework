@@ -14,7 +14,7 @@
           <newNote :note="note" @addNote="addNote"/>
 
           <!-- notes header -->
-          <div class="note-header" style="margin: 36px 0;">
+          <div class="note-header" style="margin: 35px 0;">
             <!-- title -->
             <h1> {{ title }} </h1>
 
