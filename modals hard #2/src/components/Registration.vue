@@ -3,6 +3,17 @@
     <!-- body -->
     <div slot="body">
       <form @submit.prevent="onSubmit">
+        <!-- name -->
+        <div class="form-item" :class="{ errorInput: $v.name.$error }">
+          <label>Name:</label>
+          <p class="errorText" v-if="!$v.name.required">Filed is required!</p>
+          <p
+            class="errorText"
+            v-if="!$v.name.minLength"
+          >Name must have at least {{ $v.name.$params.minLength.min }} !</p>
+          <input v-model="name" :class="{ error: $v.name.$error }" @change="$v.name.$touch()">
+        </div>
+
         <!-- email -->
         <div class="form-item" :class="{ errorInput: $v.email.$error }">
           <label>Email:</label>
@@ -26,6 +37,7 @@
             @change="$v.password.$touch()"
           >
         </div>
+
         <!-- Repeat password -->
         <div class="form-item" :class="{ errorInput: $v.repeatPassword.$error }">
           <label>Repeat password:</label>
@@ -41,7 +53,9 @@
           >
         </div>
         <!-- button -->
-        <button class="btn btnPrimary">Submit!</button>
+        <button class="btn btnPrimary">Submit!</button> <br>
+
+        <a class="btn btnWhite" click.prevent="" @click="$emit('changeModal'), clearField">To Login</a>
       </form>
     </div>
   </modal>

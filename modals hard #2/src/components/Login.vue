@@ -28,14 +28,15 @@
         </div>
 
         <!-- button -->
-        <button class="btn btnPrimary">Submit!</button>
+        <button class="btn btnPrimary">Submit!</button> <br>
+        <a class="btn btnWhite" click.prevent="" @click="$emit('changeModal'), clearField">Registration</a>
       </form>
     </div>
   </modal>
 </template>
 
 <script>
-import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+import { required, minLength, email} from "vuelidate/lib/validators";
 
 import modal from "@/components/UI/Modal.vue";
 
@@ -43,17 +44,11 @@ export default {
   components: { modal },
   data() {
     return {
-      name: "",
       email: "",
       password: "",
-      repeatPassword: ""
     };
   },
   validations: {
-    name: {
-      required,
-      minLength: minLength(4)
-    },
     email: {
       required,
       email
@@ -61,18 +56,13 @@ export default {
     password: {
       required,
       minLength: minLength(6)
-    },
-    repeatPassword: {
-      sameAsPassword: sameAs("password")
     }
   },
   methods: {
     // ф-ия очистки
     clearField() {
-        this.name = "";
         this.email = "";
         this.password = "";
-        this.repeatPassword = "";
         this.$v.$reset();
         this.$emit("close");
     },
@@ -80,7 +70,6 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         const user = {
-          name: this.name,
           email: this.email,
           password: this.password
         };

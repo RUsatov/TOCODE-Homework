@@ -7,11 +7,11 @@
 
           <!-- Login -->
           <button class="btn btnPrimary" @click="showModal = 'login'">Login</button>
-          <login v-show="showModal === 'login'" @close="showModal = 'close'"/>
+          <login v-show="showModal === 'login'" @close="showModal = 'close'" @changeModal="showModal = 'registration'"/>
           
           <!-- Registration -->
           <button class="btn btnPrimary" @click="showModal = 'registration'">Registration</button>
-          <registration v-show="showModal === 'registration'" @close="showModal = 'close'"/>
+          <registration v-show="showModal === 'registration'" @close="showModal = 'close'" @changeModal="showModal = 'login'"/>
 
         </div>
       </section>
