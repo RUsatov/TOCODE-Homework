@@ -8,22 +8,42 @@
       :key="index"
     >
       <div class="note-header" :class="{ full: !grid }">
-        <p @click="changeTitleNote(index)" v-if="showInput !== index">{{ note.title }}</p>
+        <p
+          @click="showInput(index, note.title)"
+          v-if="show.title !== index"
+          :data-title-idx="index"
+        >{{ note.title }}</p>
+
         <input
           type="text"
           class="change-title"
-          v-model="changeTitle"
-          v-show="showInput === index"
-          @keydown.enter="saveTitle(index)"
-          @blur="showInput = -1"
+          v-model="input.title"
+          v-show="show.title === index"
+          @keydown.enter="saveText(index, note.title)"
+          @blur="show.title = null"
           ref="inputTitle"
           autofocus
         >
 
         <p style="cursor: pointer;" @click="removeNote(index)">x</p>
       </div>
+
       <div class="note-body">
-        <p>{{ note.descr }}</p>
+        <p
+          @click="showInput(index, note.descr)"
+          v-if="show.descr !== index"
+          :data-descr-idx="index"
+        >{{ note.descr }}</p>
+        <input
+          type="text"
+          class="change-descr"
+          v-model="input.descr"
+          v-show="show.descr === index"
+          @keydown.enter="saveText(index, note.descr)"
+          @blur="show.descr = null;"
+          ref="inputDescr"
+          autofocus
+        >
         <span>{{ note.date }}</span>
       </div>
     </div>
@@ -36,9 +56,10 @@ export default {
     // При клике на esc вырубаем инпут
     window.addEventListener("keydown", e => {
       if (e.keyCode === 27) {
-        this.showInput = -1;
+        this.showInput.title = null;
+        this.showInput.descr = null;
       }
-    })
+    });
   },
   props: {
     notes: {
@@ -52,35 +73,72 @@ export default {
   },
   data() {
     return {
-      changeTitle: "",
-      showInput: -1
+      input: {
+        title: null,
+        descr: null
+      },
+      show: {
+        title: null,
+        descr: null
+      }
     };
   },
+  mounted() {},
+  computed: {},
 
   methods: {
     removeNote(index) {
       console.log(`Note id - ${index} removed`);
       this.$emit("remove", index);
     },
-    changeTitleNote(index) {
-      // Отображаем инпут
-      this.showInput = index;
-      // Присваиваем инпуту значение тайтла
-      this.changeTitle = this.notes[index].title;
-      //фокус на инпуте при клике
-      this.$nextTick(() => {
-        this.$refs.inputTitle[index].focus();
-      });
-    },
+    showInput(index, text) {
+      let descrText = this.$el.querySelector(`*[data-descr-idx="${index}"]`),
+        titleText = this.$el.querySelector(`*[data-title-idx="${index}"]`);
 
-    saveTitle(index) {
-      //присваиваем значение инпута нашему тайтлу
-      this.notes[index].title = this.changeTitle;
-      //присваиваем новую дату
+      if (descrText.innerText === text) {
+        this.show.descr = index;
+        this.input.descr = text;
+        this.$nextTick(() => {
+          this.$refs.inputDescr[index].focus();
+        });
+      }
+      if (titleText.innerText === text) {
+        this.show.title = index;
+        this.input.title = text;
+        this.$nextTick(() => {
+          this.$refs.inputTitle[index].focus();
+        });
+      }
+    },
+    saveText(index, text) {
+      if (this.show.title !== null) {
+        this.notes[index].title = this.input.title;
+        this.show.title = null
+      }
+      if (this.show.descr !== null) {
+        this.notes[index].descr = this.input.descr;
+        this.show.descr = null
+      }
       this.notes[index].date = new Date(Date.now()).toLocaleString();
-      //Закрываем инпут
-      this.showInput = -1;
-    }
+    },
+    // changeTitleNote(index) {
+    //   // Отображаем инпут
+    //   this.showInput = index;
+    //   // Присваиваем инпуту значение тайтла
+    //   this.changeTitle = this.notes[index].title;
+    //   //фокус на инпуте при клике
+    //   this.$nextTick(() => {
+    //     this.$refs.inputTitle[index].focus();
+    //   });
+    // },
+    // saveTitle(index) {
+    //   //присваиваем значение инпута нашему тайтлу
+    //   this.notes[index].title = this.changeTitle;
+    //   //присваиваем новую дату
+    //   this.notes[index].date = new Date(Date.now()).toLocaleString();
+    //   //Закрываем инпут
+    //   this.showInput = -1;
+    // }
   }
 };
 </script>
@@ -120,7 +178,7 @@ export default {
     text-align: center;
   }
 }
-.change-title {
+.change-title, .change-descr{
   width: 100%;
   margin: 0;
   padding: 0;
@@ -130,6 +188,9 @@ export default {
 
   border: none;
   border-radius: 0;
+}
+.change-descr{
+  margin: 20px 0;
 }
 
 .note-header {
