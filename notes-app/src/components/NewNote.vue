@@ -30,17 +30,24 @@
 
 <script>
 export default {
-  props: {
-    note: {
-      type: Object,
-      required: true,
-    },
-  },
+
+	computed: {
+		note() {
+			return this.$store.getters.getNote
+		}
+	},
   methods: {
     addNote () {
-      this.$emit('addNote', this.note)
+			let {title, descr, priority} = this.note
+
+			this.$store.dispatch('addNote', {
+				title,
+				descr,
+				priority,
+				date: new Date(Date.now()).toLocaleString()
+			})
     },
-    
+
   }
 }
 </script>

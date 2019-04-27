@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+import main from '@/store/notes/main.js'
 
+export default new Vuex.Store({
+  modules: { main }
 });

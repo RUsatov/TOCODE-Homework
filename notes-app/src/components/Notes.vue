@@ -62,10 +62,7 @@ export default {
     });
   },
   props: {
-    notes: {
-      type: Array,
-      required: true
-    },
+    
     grid: {
       type: Boolean,
       required: true
@@ -84,7 +81,11 @@ export default {
     };
   },
   mounted() {},
-  computed: {},
+  computed: {
+    notes(){
+      return this.$store.getters.getNotes
+    },
+  },
 
   methods: {
     removeNote(index) {
