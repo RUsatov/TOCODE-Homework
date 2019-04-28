@@ -19,6 +19,7 @@
           class="change-title"
           v-model="input.title"
           v-show="show.title === index"
+          @keydown.escape="show.title = null"
           @keydown.enter="saveText(index, note.title)"
           @blur="show.title = null"
           ref="inputTitle"
@@ -40,6 +41,7 @@
           v-model="input.descr"
           v-show="show.descr === index"
           @keydown.enter="saveText(index, note.descr)"
+          @keydown.escape="show.descr = null"
           @blur="show.descr = null;"
           ref="inputDescr"
           autofocus
@@ -52,31 +54,6 @@
 
 <script>
 export default {
-  mounted() {
-    // При клике на esc вырубаем инпут
-    window.addEventListener("keydown", e => {
-      if (e.keyCode === 27) {
-        this.showInput.title = null;
-        this.showInput.descr = null;
-      }
-    });
-  },
-  props: {
-
-  },
-  data() {
-    return {
-      input: {
-        title: null,
-        descr: null
-      },
-      show: {
-        title: null,
-        descr: null
-      }
-    };
-  },
-  mounted() {},
   computed: {
     notes(){
       return this.$store.getters.getNotes
@@ -84,6 +61,12 @@ export default {
     grid(){
       return this.$store.getters.getGrid
     },
+    input(){
+      return this.$store.getters.getInput
+    },
+    show(){
+      return this.$store.getters.getShow
+    }
   },
 
   methods: {
@@ -91,34 +74,24 @@ export default {
       this.$store.dispatch('removeNote', index);
     },
     showInput(index, text) {
-      let descrText = this.$el.querySelector(`*[data-descr-idx="${index}"]`),
-        titleText = this.$el.querySelector(`*[data-title-idx="${index}"]`);
+      this.$store.dispatch('showInput', {
+        index,
+        text,
+        descrText: this.$el.querySelector(`*[data-descr-idx="${index}"]`),
+        titleText: this.$el.querySelector(`*[data-title-idx="${index}"]`)
+      });
 
-      if (descrText.innerText === text) {
-        this.show.descr = index;
-        this.input.descr = text;
-        this.$nextTick(() => {
-          this.$refs.inputDescr[index].focus();
-        });
-      }
-      if (titleText.innerText === text) {
-        this.show.title = index;
-        this.input.title = text;
-        this.$nextTick(() => {
-          this.$refs.inputTitle[index].focus();
-        });
-      }
+      this.$nextTick(() => {
+        this.$refs.inputDescr[index].focus();
+        this.$refs.inputTitle[index].focus();
+      });
     },
     saveText(index, text) {
-      if (this.show.title !== null) {
-        this.notes[index].title = this.input.title;
-        this.show.title = null
-      }
-      if (this.show.descr !== null) {
-        this.notes[index].descr = this.input.descr;
-        this.show.descr = null
-      }
-      this.notes[index].date = new Date(Date.now()).toLocaleString();
+      this.$store.dispatch('saveText', {
+        index,
+        text,
+        notes: this.notes
+      });
     },
     // changeTitleNote(index) {
     //   // Отображаем инпут
