@@ -62,11 +62,7 @@ export default {
     });
   },
   props: {
-    
-    grid: {
-      type: Boolean,
-      required: true
-    }
+
   },
   data() {
     return {
@@ -85,12 +81,14 @@ export default {
     notes(){
       return this.$store.getters.getNotes
     },
+    grid(){
+      return this.$store.getters.getGrid
+    },
   },
 
   methods: {
     removeNote(index) {
-      console.log(`Note id - ${index} removed`);
-      this.$emit("remove", index);
+      this.$store.dispatch('removeNote', index);
     },
     showInput(index, text) {
       let descrText = this.$el.querySelector(`*[data-descr-idx="${index}"]`),
