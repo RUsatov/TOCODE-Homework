@@ -93,6 +93,9 @@ export default {
         notes: this.notes
       });
     },
+    /**
+     * Стаpый код
+     */
     // changeTitleNote(index) {
     //   // Отображаем инпут
     //   this.showInput = index;
