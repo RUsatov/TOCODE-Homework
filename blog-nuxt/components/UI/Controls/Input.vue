@@ -4,6 +4,7 @@
     <input
       :value="value"
       :type="type"
+      :required="required"
       @input="$emit('input', $event.target.value)"
     >
   </div>
@@ -20,6 +21,10 @@
         type: String,
         default: 'text'
       },
+      required: {
+        type: Boolean,
+        default: true
+      }
     },
   }
 </script>
