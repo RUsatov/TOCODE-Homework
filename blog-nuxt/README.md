@@ -1,6 +1,6 @@
-# blog-nuxt
+# blog
 
-> My blog
+> My badass Nuxt.js project
 
 ## Build Setup
 

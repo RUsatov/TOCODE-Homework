@@ -3,23 +3,21 @@
     class="btn"
     :class="btnClass"
     v-on="$listeners"
-    v-bind="$attrs"
-  >
+    v-bind="$attrs">
+
+    <!-- slot -->
     <slot />
+
   </button>
 </template>
 
 <script>
-  export default {
-    props: {
-      btnClass: {
-        type: String,
-        default: 'btnPrimary'
-      },
-    },
+export default {
+  props: {
+    btnClass: {
+      type: String,
+      default: 'btnPrimary'
+    }
   }
+}
 </script>
-
-<style lang="scss" scoped>
-
-</style>

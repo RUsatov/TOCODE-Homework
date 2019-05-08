@@ -1,17 +1,19 @@
 <template>
   <section class="post">
     <div class="container">
+
       <!-- header -->
       <div class="post-header">
         <img :src="post.img" :alt="post.title">
-        <h1 class="title">{{ post.title }}</h1>
+        <h1 class="title"> {{ post.title }} </h1>
         <p>{{ post.descr }}</p>
       </div>
 
       <!-- body -->
       <div class="post-body">
-        <p>{{ post.content }}</p>
+        <p> {{ post.content }} </p>
       </div>
+
     </div>
   </section>
 </template>
@@ -22,10 +24,7 @@ export default {
     post: {
       type: Object,
       required: true
-    },
-  },
-};
+    }
+  }
+}
 </script>
-
-<style lang="scss" scoped>
-</style>

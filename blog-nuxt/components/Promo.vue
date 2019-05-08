@@ -1,18 +1,18 @@
 <template>
   <section class="promo">
     <div class="container">
-      <h1 class="title">My SSR Blog! With Nuxt.js</h1>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam nobis laudantium quisquam sunt consectetur. Nostrum.</p>
+      <h1 class="title">My SSR Blog! With Nuxt.js!</h1>
+      <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </p>
     </div>
   </section>
 </template>
 
-<script>
-  export default {
-    
+<style lang="scss">
+.promo {
+  text-align: center;
+  p {
+    color: #999999;
   }
-</script>
-
-<style lang="scss" scoped>
-
+}
 </style>
+

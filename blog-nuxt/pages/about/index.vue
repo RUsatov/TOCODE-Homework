@@ -2,21 +2,21 @@
   <div class="wrapper-content wrapper-content--fixed">
     <section class="about">
       <div class="container">
-        <h1 class="title">About blog:</h1>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia voluptates aut obcaecati blanditiis distinctio iusto optio doloribus dicta ea maiores?</p>
-        <Intro title="Lorem ipsum dolor sit amet consectetur" />
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia voluptates aut obcaecati blanditiis distinctio iusto optio doloribus dicta ea maiores?</p>
-        <img src="@/assets/img/about.png" alt="">
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia voluptates aut obcaecati blanditiis distinctio iusto optio doloribus dicta ea maiores?</p>
+        <h1 class="title"> About my blog: </h1>
+        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </p>
+        <Intro title="Lorem ipsum dolor sit amet"/>
+        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </p>
+        <img src="@/assets/img/about.jpg" alt="">
+        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </p>
       </div>
     </section>
   </div>
 </template>
 
 <style lang="scss">
-.about{
+.about {
   text-align: center;
-  p{
+  p {
     margin-bottom: 10px;
   }
 }

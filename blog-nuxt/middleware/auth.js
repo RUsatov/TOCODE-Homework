@@ -1,3 +1,3 @@
-export default function (context) {
-  console.log(context);
+export default function (contex) {
+  console.log('auth')
 }
