@@ -1,15 +1,20 @@
+import loadMore from '../assets/js/loadMore.js'
+
 export default {
   state: {
     messages: [],
-    messageMain: []
+    messagesMain: []
   },
   mutations: {
-    setMessage(state, payload) {
+    setMessage (state, payload) {
       state.messages = payload
     },
     setMessageMain (state, payload) {
-      state.messageMain = payload
+      state.messagesMain = payload
     },
+    loadMessages (state, payload) {
+      state.messagesMain = [...state.messagesMain, ...payload]
+    }
   },
   actions: {
     setMessage ({commit}, payload) {
@@ -18,14 +23,22 @@ export default {
     setMessageMain ({commit}, payload) {
       commit('setMessageMain', payload)
     },
+    loadMessages ({commit, getters}) {
+      let res = getters.getMessageFilter
+      commit('loadMessages', loadMore(res))
+    }
   },
   getters: {
-    getMessage(state) {
+    getMessage (state) {
       return state.messages
     },
-    getMessageMain(state) {
-      return state.messagesMain
+    getMessageFilter (state) {
+      return state.messages.filter(mes => {
+        return mes.main === false
+      })
     },
-
+    getMessageMain (state) {
+      return state.messagesMain
+    }
   }
 }
