@@ -42,29 +42,29 @@ import preloader from '@/components/UI/Preloader.vue'
 
 export default {
   components: { notify, preloader },
-  data () {
-    return {
-      loading: false,
-      error: null
-    }
-  },
   mounted () {
     this.getNotify()
   },
   computed: {
     messages () {
       return this.$store.getters.getMessageMain
-    }
+    },
+    loading () {
+      return this.$store.getters.getLoading
+    },
+    error () {
+      return this.$store.getters.getError
+    },
   },
   methods: {
     getNotifyLazy () {
-      this.loading = true
+      this.$store.dispatch('setLoading', true)
       setTimeout (() => {
         this.getNotify()
       }, 1800)
     },
     getNotify () {
-      this.loading = true
+      this.$store.dispatch('setLoading', true)
       axios
         .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
           .then(reseponse => {
@@ -83,9 +83,10 @@ export default {
           })
           .catch(error => {
             console.log(error)
-            this.error = 'Error: Network Error'
+            this.$store.dispatch('setError', 'Error: Network Error')
           })
-          .finally( () => (this.loading = false))
+
+          .finally( () => (this.$store.dispatch('setLoading', false) ))
     }
   }
 }
