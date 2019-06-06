@@ -20,6 +20,12 @@ export default {
       let res = getters.getMessageFilter
       commit('loadMessages', loadMore(res))
     },
+    setDataLazy ({commit, dispatch}) {
+      commit('setLoading', true)
+      setTimeout (() => {
+        dispatch('setData');
+      }, 1800)
+    },
     async setData({commit}) {
       axios
         .get('https://tocode.ru/static/c/vue-pro/notifyApi.php')
