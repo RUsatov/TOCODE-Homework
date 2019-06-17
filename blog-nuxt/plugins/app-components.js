@@ -9,7 +9,6 @@ import PostsList from '@/components/Blog/PostsList.vue'
 import AppButton from '@/components/UI/Controls/Button.vue'
 import AppInput from '@/components/UI/Controls/Input.vue'
 import AppTextArea from '@/components/UI/Controls/TextArea.vue'
-import AppSelect from '@/components/UI/Controls/Select.vue'
 
 // UI
 Vue.component('Message', Message)
@@ -20,4 +19,3 @@ Vue.component('PostsList', PostsList)
 Vue.component('AppButton', AppButton)
 Vue.component('AppInput', AppInput)
 Vue.component('AppTextArea', AppTextArea)
-Vue.component('AppSelect', AppSelect)
