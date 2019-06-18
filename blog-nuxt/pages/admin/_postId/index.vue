@@ -1,30 +1,35 @@
 <template>
-  <newPostFrom
-    :postEdit="post"
-    @submit="onSubmit" />
+  <newPostFrom :postEdit="post" @submit="onSubmit"/>
 </template>
 
 <script>
-import newPostFrom from '@/components/Admin/NewPostFrom.vue'
+import newPostFrom from "@/components/Admin/NewPostFrom.vue";
+import axios from "axios";
 export default {
   components: { newPostFrom },
-  layout: 'admin',
-  data () {
-    return {
-      post: {
-        id: 1,
-        title: '1 post',
-        descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        img: 'https://lawnuk.com/wp-content/uploads/2016/08/sprogs-dogs.jpg'
-      },
-    }
+  layout: "admin",
+  asyncData(contex) {
+    return axios
+      .get(
+        `https://blog-nuxt-d2671.firebaseio.com/posts/${
+          contex.params.postId
+        }.json`
+      )
+      .then(res => {
+        return {
+          post: { ...res.data, id: contex.params.postId }
+        };
+      })
+      .catch(e => contex.error(e));
   },
   methods: {
-    onSubmit (post) {
-      console.log('Post Editing!')
-      console.log(post)
+    onSubmit(post) {
+      console.log("Post Editing!");
+      this.$store.dispatch('editPost', post)
+        .then(() => {
+          this.$router.push('/admin')
+        })
     }
   }
-}
+};
 </script>

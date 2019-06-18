@@ -10,24 +10,35 @@
 import post from '@/components/Blog/Post.vue'
 import newComment from '@/components/Comments/NewComment.vue'
 import comments from '@/components/Comments/Comments.vue'
+import axios from 'axios'
 
 export default {
   components: { post, comments, newComment },
-  data () {
+  async asyncData (context) {
+    let [post, comments] = await Promise.all([
+      axios.get(`https://blog-nuxt-d2671.firebaseio.com/posts/${context.params.id}.json`),
+      axios.get(`https://blog-nuxt-d2671.firebaseio.com/comments.json`)
+    ])
     return {
-      post: {
-        id: 1,
-        title: '1 post',
-        descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        img: 'https://lawnuk.com/wp-content/uploads/2016/08/sprogs-dogs.jpg'
-      },
-      comments: [
-        { name: 'Alex', text: 'Lorem ipsum dolor sit amet, consectetur' },
-        { name: 'Evgenii', text: 'Lorem ipsum dolor sit amet, consectetur' },
-      ]
+      post: post.data,
+      comments: comments.data
     }
   }
+  // data () {
+  //   return {
+  //     post: {
+  //       id: 1,
+  //       title: '1 post',
+  //       descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+  //       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+  //       img: 'https://lawnuk.com/wp-content/uploads/2016/08/sprogs-dogs.jpg'
+  //     },
+  //     comments: [
+  //       { name: 'Alex', text: 'Lorem ipsum dolor sit amet, consectetur' },
+  //       { name: 'Evgenii', text: 'Lorem ipsum dolor sit amet, consectetur' },
+  //     ]
+  //   }
+  // }
 }
 </script>
 
