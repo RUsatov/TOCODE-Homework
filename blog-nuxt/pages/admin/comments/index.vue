@@ -1,41 +1,60 @@
 <template>
+<no-ssr>
   <commentTable :thead="['Name', 'Text', 'Status', 'Change Status', 'Delete']">
     <tbody slot="tbody">
       <tr v-for="comment in comments" :key="comment.id">
         <td><span> {{ comment.name }} </span></td>
         <td><span> {{ comment.text }} </span></td>
         <td>
-          <span v-if="comment.status" class="status true"> Publish </span>
+          <span v-if="comment.publish" class="status true"> Publish </span>
           <span v-else class="status false"> Hiden </span>
         </td>
-        <td><span @click="changeComment(comment.id)" class="link"> Change Status </span></td>
+        <td><span @click="changeComment(comment)" class="link"> Change Status </span></td>
         <td><span @click="deleteComment(comment.id)" class="link"> Delete </span></td>
       </tr>
     </tbody>
   </commentTable>
+</no-ssr>
 </template>
 
 <script>
-import commentTable from '@/components/Admin/CommentTable.vue'
+import axios from 'axios';
+import commentTable from '@/components/Admin/CommentTable.vue';
 
 export default {
   components: { commentTable },
   layout: 'admin',
   data () {
     return {
-      comments: [
-        { id: 1, name: 'Alex', text: 'Lorem ipsum dolor sit amet, consectetur', status: true },
-        { id: 2, name: 'Evgenii', text: 'Lorem ipsum dolor sit amet, consectetur', status: false},
-      ]
+      comments: []
     }
   },
+  mounted () {
+    this.loadComments()
+  },
   methods: {
-    changeComment (id) {
-      console.log(`Change comment id - ${id}`)
+    loadComments () {
+      axios.get('https://blog-nuxt-d2671.firebaseio.com/comments.json')
+      .then((res) => {
+        let commentsArray = [];
+        Object.keys(res.data).forEach(key => {
+          const comment = res.data[key];
+          commentsArray.push({...comment, id: key})
+        })
+        this.comments = commentsArray;
+      })
+    },
+    changeComment (comment) {
+      comment.publish = !comment.publish;
+      axios.put(`https://blog-nuxt-d2671.firebaseio.com/comments/${comment.id}.json`, comment)
     },
     deleteComment (id) {
-      console.log(`Delete comment id - ${id}`)
-    }
+      axios.delete(`https://blog-nuxt-d2671.firebaseio.com/comments/${id}.json`)
+        .then((res) => {
+          this.loadComments();
+        })
+    },
+
   }
 }
 </script>
