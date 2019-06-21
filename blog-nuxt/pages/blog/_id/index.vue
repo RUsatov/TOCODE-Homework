@@ -1,35 +1,56 @@
 <template>
   <div class="wrapper-content wrapper-content--fixed">
-    <post :post="post" />
-    <comments :comments="comments" />
+    <post :post="post"/>
+    <comments :comments="comments"/>
     <newComment :postId="$route.params.id"/>
   </div>
 </template>
 
 <script>
-import post from '@/components/Blog/Post.vue'
-import newComment from '@/components/Comments/NewComment.vue'
-import comments from '@/components/Comments/Comments.vue'
-import axios from 'axios'
+import post from "@/components/Blog/Post.vue";
+import newComment from "@/components/Comments/NewComment.vue";
+import comments from "@/components/Comments/Comments.vue";
+import axios from "axios";
 
 export default {
   components: { post, comments, newComment },
-  async asyncData (context) {
+  head() {
+    let title = this.post.title,
+      descr = this.post.descr,
+      img = `${this.post.img}`, //`site.com/${this.post.img}`,
+      type = "article";
+    return {
+      title: title,
+      meta: [
+        { hid: "og:title", name: "og:title", content: title },
+        { hid: "description", name: "description", content: descr },
+        { hid: "og:description", name: "og:description", content: descr },
+        { hid: "og:type", name: "og:type", content: type },
+        { hid: "og:img", name: "og:img", content: img },
+      ]
+    };
+  },
+  async asyncData(context) {
     let [post, comments] = await Promise.all([
-      axios.get(`https://blog-nuxt-d2671.firebaseio.com/posts/${context.params.id}.json`),
+      axios.get(
+        `https://blog-nuxt-d2671.firebaseio.com/posts/${context.params.id}.json`
+      ),
       axios.get(`https://blog-nuxt-d2671.firebaseio.com/comments.json`)
-    ])
+    ]);
 
     let commentsArray = [],
-        commentsArrayRes = [];
+      commentsArrayRes = [];
 
     Object.keys(comments.data).forEach(key => {
-      commentsArray.push(comments.data[key])
-    })
+      commentsArray.push(comments.data[key]);
+    });
 
     for (let i = 0; i < commentsArray.length; i++) {
-      if (commentsArray[i].postId === context.params.id && commentsArray[i].publish === true) {
-        commentsArrayRes.push(commentsArray[i])
+      if (
+        commentsArray[i].postId === context.params.id &&
+        commentsArray[i].publish === true
+      ) {
+        commentsArrayRes.push(commentsArray[i]);
       }
     }
     console.log(commentsArray, commentsArrayRes);
@@ -40,9 +61,9 @@ export default {
     return {
       post: post.data,
       comments: commentsArrayRes
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -55,7 +76,7 @@ export default {
   margin-bottom: 30px;
   img {
     margin-bottom: 16px;
-    max-width: 400px
+    max-width: 400px;
   }
   p {
     color: #999999;
@@ -64,5 +85,4 @@ export default {
 .post-body {
   text-align: left;
 }
-
 </style>
