@@ -19,6 +19,7 @@
   "devDependencies": {
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.9",
-    "sass-loader": "^7.1.0"
+    "sass-loader": "^7.1.0",
+    "vue2-ace-editor": "0.0.13"
   }
 }

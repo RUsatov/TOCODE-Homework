@@ -9,6 +9,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     post: {
@@ -36,6 +37,7 @@ export default {
   text-align: center;
   img {
     margin-bottom: 16px;
+    max-width: 100%;
   }
   .post-content {
     p {

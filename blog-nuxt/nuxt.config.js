@@ -36,7 +36,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~plugins/app-components.js'
+    '~plugins/app-components.js',
+    // { src: '~plugins/ace-vue.js',  ssr: false },
   ],
 
   /*
