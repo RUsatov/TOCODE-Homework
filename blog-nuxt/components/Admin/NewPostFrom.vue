@@ -19,19 +19,27 @@
           <label class="label">Content:</label>
         </div>
         <div class="editor">
-          <!-- <AppTextArea class="editor_block" v-model="post.content"> Content: </AppTextArea> -->
-          <!-- <no-ssr> -->
-          <editor
-            class="editor_block"
-            v-model="post.content"
-            @init="editorInit"
-            lang="html"
-            theme="clouds"
-            width="50%"
-            height="auto"
-          ></editor>
-          <!-- </no-ssr> -->
-          <div class="preview editor_block" v-html="post.content"></div>
+          <!-- <AppTextArea v-show="isMD" class="editor_block" v-model="post.content"> Content: </AppTextArea> -->
+          <!-- <textarea v-if="isMD" class="editor_block" v-model="post.content"></textarea> -->
+
+          <no-ssr placeholder="Codemirror Loading...">
+            <codemirror
+              v-if="isMD"
+              class="editor_block"
+              v-model="post.content"
+              :options="cmOptionMd"
+            ></codemirror>
+          </no-ssr>
+
+          <no-ssr placeholder="Codemirror Loading...">
+            <codemirror
+              v-if="!isMD"
+              class="editor_block"
+              v-model="post.content"
+              :options="cmOption"
+            ></codemirror>
+          </no-ssr>
+          <!-- <div class="preview editor_block" v-html="marked(post.content, { sanitize: true })"></div> -->
         </div>
         <!-- buttons -->
         <div class="controls">
@@ -44,11 +52,19 @@
 </template>
 
 <script>
-const editor = process.client ? require("vue2-ace-editor") : "";
+const marked = require('marked');
+
+// if (process.client) {
+// var showdown  = require('showdown'),
+//     converter = new showdown.Converter();
+//     let text      = '# hello, markdown!',
+//     html      = converter.makeHtml(text);
+//     console.log('1', html);
+
+// }
+    // console.log('2', html);
+// const editor = process.client ? require("vue2-ace-editor") : "";
 export default {
-  components: {
-    editor
-  },
   props: {
     postEdit: {
       type: Object,
@@ -65,9 +81,31 @@ export default {
             img: "",
             content: ""
           },
-      isMD: false
+      isMD: false,
+      cmOption: {
+        tabSize: 2,
+        foldGutter: true,
+        styleActiveLine: true,
+        lineNumbers: true,
+        line: true,
+        keyMap: "sublime",
+        mode: "htmlmixed",
+        theme: "default"
+      },
+      cmOptionMd: {
+        tabSize: 2,
+        foldGutter: true,
+        styleActiveLine: true,
+        line: true,
+        lineNumbers: true,
+        lineWrapping: false,
+        keyMap: "sublime",
+        mode: "text/x-markdown",
+        theme: "default"
+      }
     };
   },
+  // <div style="padding: 40px"><h1>Header</h1></div>
   methods: {
     onSubmit() {
       this.$emit("submit", this.post);
@@ -75,11 +113,6 @@ export default {
     cancel() {
       this.$router.push("/admin/");
     },
-    editorInit: function() {
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html"); //language
-      require("brace/theme/clouds");
-    }
   }
 };
 </script>
@@ -96,13 +129,15 @@ export default {
 }
 .editor_block {
   width: 50%;
+  border-radius: 0;
+  resize: none;
 }
-.content-label{
+.content-label {
   display: flex;
   margin-bottom: 14px;
-  .label{
+  .label {
     margin-bottom: 0;
-    flex-grow: .8;
+    flex-grow: 0.8;
   }
 }
 .switch {
@@ -125,7 +160,7 @@ $circ: 28px;
 $color: #4b40e3;
 $switch-height: 28px;
 
-.hide{
+.hide {
   clip: rect(0 0 0 0);
   height: 1px;
   margin: -1px;
@@ -145,7 +180,7 @@ $switch-height: 28px;
   height: $switch-height;
   border-radius: $switch-height/2;
   background: #ffffff;
-  border: 1px solid #DCDFE6;
+  border: 1px solid #dcdfe6;
   transition: box-shadow 0.4s;
   margin-bottom: 0;
 
@@ -162,16 +197,12 @@ $switch-height: 28px;
     background: #fff;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition:
-      background 0.4s,
-      left 0.4s,
-      height 0.2s,
-      width 0.2s;
+    transition: background 0.4s, left 0.4s, height 0.2s, width 0.2s;
   }
 }
 
 input:checked + label {
-  box-shadow: inset 0 0 0 $switch-height tint( $color, 50% );
+  box-shadow: inset 0 0 0 $switch-height tint($color, 50%);
 }
 
 label:active:after,
@@ -184,5 +215,4 @@ input:checked + label:after {
   left: calc(100% - #{$circ});
   background: $color;
 }
-
 </style>

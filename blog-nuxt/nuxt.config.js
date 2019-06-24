@@ -29,7 +29,13 @@ export default {
   ** Global CSS
   */
   css: [
-    { src: '~/assets/scss/main.scss', lang: 'scss' }
+    { src: '~/assets/scss/main.scss', lang: 'scss' },
+     // lib css
+     'codemirror/lib/codemirror.css',
+     // merge css
+     'codemirror/addon/merge/merge.css',
+     // theme css
+     'codemirror/theme/base16-dark.css'
   ],
 
   /*
@@ -37,6 +43,7 @@ export default {
   */
   plugins: [
     '~plugins/app-components.js',
+    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false }
     // { src: '~plugins/ace-vue.js',  ssr: false },
   ],
 
