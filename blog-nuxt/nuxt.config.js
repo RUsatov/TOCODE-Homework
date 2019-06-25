@@ -43,9 +43,6 @@ export default {
   plugins: [
     '~plugins/app-components.js',
     { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false },
-    { src: '~plugins/turndown.js', ssr: false },
-    // { src: '~plugins/marked.js', ssr: false },
-    // { src: '~plugins/ace-vue.js',  ssr: false },
   ],
 
   /*

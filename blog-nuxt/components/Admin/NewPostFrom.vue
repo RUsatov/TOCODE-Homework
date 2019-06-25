@@ -48,7 +48,7 @@
         <!-- buttons -->
         <div class="controls">
           <AppButton class="btnDanger" @click.prevent="cancel">Cancel</AppButton>
-          <AppButton @click="onSubmit">Save</AppButton>
+          <AppButton @click.prevent="onSubmit">Save</AppButton>
         </div>
       </form>
     </div>
@@ -58,32 +58,7 @@
 <script>
 const marked = require('marked');
 
-// if (process.client){
-//           const TurndownService = require('turndown');
-//           let turndownService = new TurndownService();
-//         }
-// if (process.client) {
-
-
-//   console.log('123');
-// }
-
-
-// if (process.client) {
-//   const TurndownService = require('turndown');
-// let turndownService = new TurndownService();
-
-// // Use the turndown method from the created instance
-// // to convert the first argument (HTML string) to Markdown
-// let markdown = turndownService.turndown('<h1>Hello world!</h1>');
-
-// }
-    // console.log('2', html);
-// let TurndownService;
-
-// if (process.browser) {
-//   TurndownService = require('turndown');
-// }
+const html2md = require('h2m')
 
 export default {
   props: {
@@ -92,12 +67,8 @@ export default {
       requreid: false
     }
   },
-  mounted () {
-    // let turndownService = new TurndownService();
-
-    // let markdown = turndownService.turndown('<h1>Hello world!</h1>');
-
-    // console.log(markdown);
+  created () {
+    this.checkVar();
   },
   data() {
     return {
@@ -133,7 +104,6 @@ export default {
       }
     };
   },
-  // <div style="padding: 40px"><h1>Header</h1></div>
   watch: {
     textHtml(val) {
       this.post.content = this.textHtml
@@ -143,6 +113,11 @@ export default {
     },
   },
   methods: {
+    checkVar() {
+      if(this.postEdit) {
+        !this.isMD ? this.textHtml = this.post.content : this.textMd = html2md(this.post.content)
+      }
+    },
     onSubmit() {
       this.$emit("submit", this.post);
     },
@@ -150,7 +125,6 @@ export default {
       this.$router.push("/admin/");
     },
     toMd(val) {
-      // console.log(marked(val));
       return marked(val);
     },
     changeLang() {
@@ -158,9 +132,7 @@ export default {
         this.textHtml = marked(this.textMd);
         this.post.content = this.textHtml
       } else {
-          // this.textMd = turndownService.turndown(this.textHtml);
-        this.textMd = this.textHtml;
-        console.log('123');
+        this.textMd = html2md(this.textHtml);
         this.post.content = this.textHtml
       }
     }
