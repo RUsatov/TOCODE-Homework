@@ -128,12 +128,11 @@ export default {
       return marked(val);
     },
     changeLang() {
+      this.post.content = this.textHtml;
       if(this.isMD) {
         this.textHtml = marked(this.textMd);
-        this.post.content = this.textHtml
       } else {
         this.textMd = html2md(this.textHtml);
-        this.post.content = this.textHtml
       }
     }
   }
