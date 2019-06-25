@@ -11,12 +11,11 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      // { name: 'yandex-verification', content: 'nndn3s43sbhkf' },
-      // { name: 'google-site-verification', content: 'hsjs4b-dsdg-454' },
     ],
+
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat' },
     ]
   },
 
@@ -43,7 +42,9 @@ export default {
   */
   plugins: [
     '~plugins/app-components.js',
-    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false }
+    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false },
+    { src: '~plugins/turndown.js', ssr: false },
+    // { src: '~plugins/marked.js', ssr: false },
     // { src: '~plugins/ace-vue.js',  ssr: false },
   ],
 

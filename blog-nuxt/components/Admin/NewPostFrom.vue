@@ -10,7 +10,7 @@
           <div class="switch">
             <span>HTML</span>
 
-            <input v-model="isMD" class="hide" id="toggle" type="checkbox">
+            <input v-model="isMD" @click="changeLang" class="hide" id="toggle" type="checkbox">
             <label for="toggle" class="toggle_label"></label>
 
             <span>MD</span>
@@ -20,26 +20,30 @@
         </div>
         <div class="editor">
           <!-- <AppTextArea v-show="isMD" class="editor_block" v-model="post.content"> Content: </AppTextArea> -->
-          <!-- <textarea v-if="isMD" class="editor_block" v-model="post.content"></textarea> -->
+          <!-- <textarea class="editor_block" v-model="post.content"></textarea> -->
 
-          <no-ssr placeholder="Codemirror Loading...">
-            <codemirror
-              v-if="isMD"
-              class="editor_block"
-              v-model="post.content"
-              :options="cmOptionMd"
-            ></codemirror>
-          </no-ssr>
-
+          <!-- HTML -->
           <no-ssr placeholder="Codemirror Loading...">
             <codemirror
               v-if="!isMD"
               class="editor_block"
-              v-model="post.content"
+              v-model="textHtml"
               :options="cmOption"
             ></codemirror>
           </no-ssr>
-          <!-- <div class="preview editor_block" v-html="marked(post.content, { sanitize: true })"></div> -->
+
+          <!-- MD -->
+          <no-ssr placeholder="Codemirror Loading...">
+            <codemirror
+              v-if="isMD"
+              class="editor_block"
+              v-model="textMd"
+              :options="cmOptionMd"
+            ></codemirror>
+          </no-ssr>
+
+
+          <div class="preview editor_block" v-html="toMd(post.content)"></div>
         </div>
         <!-- buttons -->
         <div class="controls">
@@ -54,16 +58,33 @@
 <script>
 const marked = require('marked');
 
+// if (process.client){
+//           const TurndownService = require('turndown');
+//           let turndownService = new TurndownService();
+//         }
 // if (process.client) {
-// var showdown  = require('showdown'),
-//     converter = new showdown.Converter();
-//     let text      = '# hello, markdown!',
-//     html      = converter.makeHtml(text);
-//     console.log('1', html);
+
+
+//   console.log('123');
+// }
+
+
+// if (process.client) {
+//   const TurndownService = require('turndown');
+// let turndownService = new TurndownService();
+
+// // Use the turndown method from the created instance
+// // to convert the first argument (HTML string) to Markdown
+// let markdown = turndownService.turndown('<h1>Hello world!</h1>');
 
 // }
     // console.log('2', html);
-// const editor = process.client ? require("vue2-ace-editor") : "";
+// let TurndownService;
+
+// if (process.browser) {
+//   TurndownService = require('turndown');
+// }
+
 export default {
   props: {
     postEdit: {
@@ -71,17 +92,24 @@ export default {
       requreid: false
     }
   },
+  mounted () {
+    // let turndownService = new TurndownService();
+
+    // let markdown = turndownService.turndown('<h1>Hello world!</h1>');
+
+    // console.log(markdown);
+  },
   data() {
     return {
-      post: this.postEdit
-        ? { ...this.postEdit }
-        : {
-            title: "",
-            descr: "",
-            img: "",
-            content: ""
-          },
+      post: this.postEdit ? { ...this.postEdit } : {
+        title: "",
+        descr: "",
+        img: "",
+        content: ""
+      },
       isMD: false,
+      textHtml: '',
+      textMd: '',
       cmOption: {
         tabSize: 2,
         foldGutter: true,
@@ -106,6 +134,14 @@ export default {
     };
   },
   // <div style="padding: 40px"><h1>Header</h1></div>
+  watch: {
+    textHtml(val) {
+      this.post.content = this.textHtml
+    },
+    textMd(val) {
+      this.post.content = marked(val);
+    },
+  },
   methods: {
     onSubmit() {
       this.$emit("submit", this.post);
@@ -113,6 +149,21 @@ export default {
     cancel() {
       this.$router.push("/admin/");
     },
+    toMd(val) {
+      // console.log(marked(val));
+      return marked(val);
+    },
+    changeLang() {
+      if(this.isMD) {
+        this.textHtml = marked(this.textMd);
+        this.post.content = this.textHtml
+      } else {
+          // this.textMd = turndownService.turndown(this.textHtml);
+        this.textMd = this.textHtml;
+        console.log('123');
+        this.post.content = this.textHtml
+      }
+    }
   }
 };
 </script>
