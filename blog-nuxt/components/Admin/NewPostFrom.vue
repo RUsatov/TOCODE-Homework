@@ -43,7 +43,7 @@
           </no-ssr>
 
 
-          <div class="preview editor_block" v-html="toMd(post.content)"></div>
+          <div class="preview editor_block" v-html="post.content"></div>
         </div>
         <!-- buttons -->
         <div class="controls">
@@ -115,7 +115,7 @@ export default {
   methods: {
     checkVar() {
       if(this.postEdit) {
-        !this.isMD ? this.textHtml = this.post.content : this.textMd = html2md(this.post.content)
+        !this.isMD ? this.textHtml = marked(this.post.content) : this.textMd = html2md(this.post.content)
       }
     },
     onSubmit() {
